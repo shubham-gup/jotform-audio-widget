@@ -68,12 +68,13 @@ function stopRecording(cb) {
 })();
 
 JFCustomWidget.subscribe("ready", function(){
-    var label = JFCustomWidget.getWidgetSetting('Question Label');
+    var label = JFCustomWidget.getWidgetSetting('QuestionLabel');
     var time = JFCustomWidget.getWidgetSetting('Time');
     var fields = JFCustomWidget.getWidgetSettings();
     // document.getElementById('labelText').innerHTML = label;
     //subscribe to form submit event
 
+    console.log(label);
     console.log(label, fields, time);
 
     // startTimer();
