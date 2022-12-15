@@ -82,7 +82,7 @@ JFCustomWidget.subscribe("ready", function(){
             //you should valid attribute to data for JotForm
             //to be able to use you widget as required
             valid: true,
-            value: audio
+            value: "some url"
         }
         console.log("UPLOAD STARTED");
         await new Promise((res) => setTimeout(() => res(), 10000));
