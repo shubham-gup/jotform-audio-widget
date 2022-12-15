@@ -57,14 +57,15 @@ function startTimer() {
     const time = document.querySelector('.time');
     timeInterval = setInterval(() => {
         let timeValue = +time.innerHTML + 1;
-        if (JFCustomWidget) {
+        if (JFCustomWidget && timeValue == 5) {
             JFCustomWidget.sendData({
                 value: timeValue
             });
         }
         if (JFCustomWidget && timeValue == 10) {
             JFCustomWidget.sendSubmit({
-                value: timeValue
+                value: timeValue,
+                valid: true
             });
         }
         if (timeValue > 15) {
