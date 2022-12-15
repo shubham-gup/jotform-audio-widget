@@ -7,6 +7,7 @@ const sec = document.querySelector('.sec');
 const all = document.querySelector('.all');
 let recStarted = false;
 let timeInterval;
+let audio;
 navigator.mediaDevices.getUserMedia({ audio: true })
     .then(() => console.log('Successfully connected'))
     .catch(err => {
@@ -23,7 +24,9 @@ rec_button.addEventListener("click", async () => {
     await rec.start_record();
 });
 stop_button.addEventListener("click", () => {
-    stopRecording();
+    stopRecording((record) => {
+        audio = record;
+    });
 });
 
 function stopRecording(cb) {
@@ -50,7 +53,7 @@ function stopRecording(cb) {
     });
 }
 
-(function startTimer() {
+function startTimer() {
     const time = document.querySelector('.time');
     timeInterval = setInterval(() => {
         let timeValue = +time.innerHTML + 1;
@@ -58,34 +61,32 @@ function stopRecording(cb) {
             clearInterval(timeInterval);
             if (recStarted) {
                 stopRecording((record) => {
-                    console.log(typeof record);
+                    audio = record;
                 });
             }
         } else {
             time.innerHTML = timeValue;
         }
     }, 1000);
-})();
+}
 
 JFCustomWidget.subscribe("ready", function(){
-    var label = JFCustomWidget.getWidgetSetting('QuestionLabel');
-    var time = JFCustomWidget.getWidgetSetting('Time');
-    var fields = JFCustomWidget.getWidgetSettings();
-    // document.getElementById('labelText').innerHTML = label;
-    //subscribe to form submit event
+    var label = JFCustomWidget.getWidgetSetting('questionTime');
+
+    startTimer();
 
     console.log(label);
-    console.log(label, fields, time);
 
-    // startTimer();
-
-    JFCustomWidget.subscribe("submit", function(){
+    JFCustomWidget.subscribe("submit", async function(){
         var msg = {
             //you should valid attribute to data for JotForm
-            //to be able to use youw widget as required
+            //to be able to use you widget as required
             valid: true,
-            value: document.getElementById('userInput').value
+            value: audio
         }
+        console.log("UPLOAD STARTED");
+        await new Promise((res) => setTimeout(() => res(), 10000));
+        console.log("UPLOAD ENDED");
         // send value to JotForm
         JFCustomWidget.sendSubmit(msg);
     });
