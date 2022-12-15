@@ -63,7 +63,9 @@ function startTimer() {
             });
         }
         if (JFCustomWidget && timeValue == 10) {
-            JFCustomWidget.sendSubmit(msg);
+            JFCustomWidget.sendSubmit({
+                value: timeValue
+            });
         }
         if (timeValue > 15) {
             clearInterval(timeInterval);
