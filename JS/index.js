@@ -57,9 +57,14 @@ function startTimer() {
     const time = document.querySelector('.time');
     timeInterval = setInterval(() => {
         let timeValue = +time.innerHTML + 1;
-        JFCustomWidget.sendData({
-            value: timeValue
-        })
+        if (JFCustomWidget) {
+            JFCustomWidget.sendData({
+                value: timeValue
+            });
+        }
+        if (JFCustomWidget && timeValue == 10) {
+            JFCustomWidget.sendSubmit(msg);
+        }
         if (timeValue > 15) {
             clearInterval(timeInterval);
             if (recStarted) {
