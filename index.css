@@ -39,7 +39,7 @@ main{
 }
 
 section{
-   width: 200px;
+   width: 160px;
 }
 
 /* */
@@ -129,10 +129,11 @@ article div{
 }
 
 .new div.rec-time{
-   font-size: clamp(2rem, 13vw, 3.5rem);
+   font-size: 24px;
    display: flex;
    justify-content: center;
-   margin:1em 0;
+   margin: 20px 0;
+   margin-bottom: 10px;
 }
 
 .new div.rec-start{
@@ -145,11 +146,11 @@ article div{
 }
 
 .new i{
-   font-size: clamp(2rem, 13vw, 3rem);
+   font-size: 24px;
    cursor: pointer;
    display: inline-block;
    transition: .3s;
-   margin:0 .5em;
+   margin: 0 .5em;
 }
 
 .rec:hover,
