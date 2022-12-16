@@ -96,7 +96,7 @@ JFCustomWidget.subscribe("ready", function (formId, value) {
       value: "some url",
     };
     console.log("UPLOAD STARTED");
-    await new Promise((res) => setTimeout(() => res(), 10000));
+    // await new Promise((res) => setTimeout(() => res(), 10000));
     fetch({
       url: "https://jsonplaceholder.typicode.com/posts",
       method: "POST",
