@@ -81,6 +81,16 @@ function startTimer() {
   }, 1000);
 }
 
+async function upload() {
+    const d = await fetch({
+        url: "https://jsonplaceholder.typicode.com/posts",
+        method: "POST",
+      });
+    const res = await d.json();
+    console.log(res)
+    return res;
+}
+
 JFCustomWidget.subscribe("ready", function (formId, value) {
   var label = JFCustomWidget.getWidgetSetting("questionTime");
 
@@ -98,13 +108,8 @@ JFCustomWidget.subscribe("ready", function (formId, value) {
     console.log("UPLOAD STARTED");
     // await new Promise((res) => setTimeout(() => res(), 10000));
     try {
-        const d = await fetch({
-          url: "https://jsonplaceholder.typicode.com/posts",
-          method: "POST",
-        });
-        const res = await d.json();
-        console.log(res)
-        JFCustomWidget.sendSubmit(msg);
+        await upload();
+        // JFCustomWidget.sendSubmit(msg);
         console.log("UPLOAD ENDED");
         JFCustomWidget.sendSubmit({
             value: 'dummy url',
