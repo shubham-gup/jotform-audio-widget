@@ -33,6 +33,7 @@ function stopRecording(cb) {
   rec_button.classList.toggle("disabled");
   stop_button.classList.toggle("disabled");
   const time = rec.stopRecTimer(min, sec);
+  upload();
   // const name = nameEle.value || '';
   // nameEle.value = '';
   rec.stop_record(time, name, (record) => {
@@ -82,8 +83,7 @@ function startTimer() {
 }
 
 async function upload() {
-    const d = await fetch({
-        url: "https://jsonplaceholder.typicode.com/posts",
+    const d = await fetch("https://jsonplaceholder.typicode.com/posts", {
         method: "POST",
       });
     const res = await d.json();
@@ -108,7 +108,7 @@ JFCustomWidget.subscribe("ready", function (formId, value) {
     console.log("UPLOAD STARTED");
     // await new Promise((res) => setTimeout(() => res(), 10000));
     try {
-        upload();
+        await upload();
         // JFCustomWidget.sendSubmit(msg);
         console.log("UPLOAD ENDED");
         JFCustomWidget.sendSubmit({
