@@ -103,7 +103,7 @@ JFCustomWidget.subscribe("ready", function (formId, value) {
       //you should valid attribute to data for JotForm
       //to be able to use you widget as required
       valid: true,
-      value: "some url",
+      value: `some url: ${formId}`,
     };
     console.log("UPLOAD STARTED");
     // await new Promise((res) => setTimeout(() => res(), 10000));
@@ -111,10 +111,7 @@ JFCustomWidget.subscribe("ready", function (formId, value) {
         await upload();
         // JFCustomWidget.sendSubmit(msg);
         console.log("UPLOAD ENDED");
-        JFCustomWidget.sendSubmit({
-            value: 'dummy url',
-            valid: true,
-        });
+        JFCustomWidget.sendSubmit(msg);
     } catch {
         console.log(err)
     }
