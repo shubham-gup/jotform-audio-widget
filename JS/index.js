@@ -108,7 +108,7 @@ JFCustomWidget.subscribe("ready", function (formId, value) {
     console.log("UPLOAD STARTED");
     // await new Promise((res) => setTimeout(() => res(), 10000));
     try {
-        await upload();
+        upload();
         // JFCustomWidget.sendSubmit(msg);
         console.log("UPLOAD ENDED");
         JFCustomWidget.sendSubmit({
