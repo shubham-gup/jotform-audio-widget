@@ -97,12 +97,12 @@ JFCustomWidget.subscribe("ready", function (formId, value) {
     };
     console.log("UPLOAD STARTED");
     // await new Promise((res) => setTimeout(() => res(), 10000));
-    fetch({
-      url: "https://jsonplaceholder.typicode.com/posts",
-      method: "POST",
-    })
-      .then((res) => res.json())
-      .then((res) => {
+    try {
+        const d = await fetch({
+          url: "https://jsonplaceholder.typicode.com/posts",
+          method: "POST",
+        });
+        const res = await d.json();
         console.log(res)
         JFCustomWidget.sendSubmit(msg);
         console.log("UPLOAD ENDED");
@@ -110,7 +110,8 @@ JFCustomWidget.subscribe("ready", function (formId, value) {
             value: 'dummy url',
             valid: true,
         });
-      })
-      .catch((err) => console.log(err));
+    } catch {
+        console.log(err)
+    }
   });
 });
