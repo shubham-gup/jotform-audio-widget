@@ -72,9 +72,9 @@ function startTimer() {
     if (timeValue > 15) {
       clearInterval(timeInterval);
       if (recStarted) {
-        stopRecording((record) => {
-          audio = record;
-        });
+        stopRecording(async (record) => {
+          await uploadRecording(record);
+        }); 
       }
     } else {
       time.innerHTML = timeValue;
