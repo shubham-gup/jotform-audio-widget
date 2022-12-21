@@ -56,14 +56,12 @@ async function uploadToS3(presignedPostData, blob) {
 
   formData.append("file", file);
 
-  const data = await fetch(presignedPostData.url, {
+  await fetch(presignedPostData.url, {
     method: "POST",
     body: formData,
   }).catch((err) => {
     // TODO: handle errors
   });
-  const res = await data.json();
-  return res;
 }
 
 async function upload(url) {
@@ -84,9 +82,9 @@ async function upload(url) {
     // TODO: handle errors
   });
   const res = await data.json();
-  const uploadedUrl = await uploadToS3(res, url);
+  await uploadToS3(res, url);
   uploaded = true;
-  return uploadedUrl;
+  return questionFileName;
 }
 
 function markResponseRecorded() {
@@ -201,6 +199,8 @@ JFCustomWidget.subscribe("ready", function (formData) {
   const label = JFCustomWidget.getWidgetSetting("questionTime");
 
   init(+label, formData.formID);
+
+  console.log(formData);
 
   JFCustomWidget.subscribe("submit", function () {
     done();
