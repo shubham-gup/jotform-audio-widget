@@ -30,7 +30,7 @@ function init(qTime, qId) {
 }
 
 // TODO: this is temp
-init(10, 1);
+// init(10, 1);
 
 recButton.addEventListener("click", async () => {
   if (!isRecorded) {
