@@ -217,7 +217,11 @@ JFCustomWidget.subscribe("ready", function (formData) {
 
   init(+label, formData.formID);
 
+  console.log(formData);
+
   JFCustomWidget.subscribe("submit", function () {
-    done();
+    if (isRecordingStarted) {
+      done();
+    }
   });
 });
