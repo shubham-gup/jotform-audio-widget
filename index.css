@@ -13,7 +13,7 @@ body {
 }
 
 :root {
-   --wave-max-height: 50%;
+  --wave-max-height: 50%;
 }
 
 .recorder {
@@ -25,33 +25,33 @@ body {
   align-items: center;
   padding-left: 20px;
   padding-right: 20px;
-  margin-top: 10px;
+  margin: 10px 0;
 }
 
 .display-flex {
-   display: flex;
+  display: flex;
 }
 
 .player {
-   width: 100%;
+  width: 100%;
 }
 
 .response {
-   align-items: center;
-   margin-left: 12px;
-   font-size: 14px;
+  align-items: center;
+  margin-left: 12px;
+  font-size: 14px;
 }
 
 .response i {
-   margin-right: 5px;
+  margin-right: 5px;
 }
 
 .check {
-   color: green;
+  color: green;
 }
 
 .cross {
-   color: red;
+  color: red;
 }
 
 .audio-recorder {
@@ -64,22 +64,24 @@ body {
   display: none;
 }
 
-.microphone, .cancel {
+.microphone,
+.cancel {
   font-size: 20px;
 }
 
-.record-btn, .cancel-btn {
+.recordBtn,
+.cancelBtn {
   border: none;
   background-color: inherit;
   cursor: pointer;
 }
 
-.cancel-btn {
-   margin-right: 14px;
-   color: red;
+.cancelBtn {
+  margin-right: 14px;
+  color: red;
 }
 
-.record-btn.recording {
+.recordBtn.recording {
   color: red;
 }
 
@@ -167,4 +169,32 @@ body {
 
 .box13 {
   animation-delay: 0.65s;
+}
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+/* Tooltip text */
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+
+  /* Position the tooltip text - see examples below! */
+  position: absolute;
+  z-index: 1;
+  bottom: 120%;
+  left: 50%;
+  margin-left: -60px; /* Use half of the width (120/2 = 60), to center the tooltip */
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.tooltip:hover .tooltiptext {
+  visibility: visible;
 }

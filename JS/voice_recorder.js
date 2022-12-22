@@ -4,26 +4,7 @@
  * Copyright 2012-2016 Matt Diamond (https://github.com/mattdiamond)
  * Licensed under MIT
  */
-(function (f) {
-  if (typeof exports === "object" && typeof module !== "undefined") {
-    module.exports = f();
-  } else if (typeof define === "function" && define.amd) {
-    define([], f);
-  } else {
-    var g;
-    if (typeof window !== "undefined") {
-      g = window;
-    } else if (typeof global !== "undefined") {
-      g = global;
-    } else if (typeof self !== "undefined") {
-      g = self;
-    } else {
-      g = this;
-    }
-    g.VoiceRecorder = f();
-  }
-})(function () {
-  var define, module, exports;
+const VoiceRecorder = (() => {
   return (function e(t, n, r) {
     function s(o, u) {
       if (!n[o]) {
@@ -535,4 +516,6 @@
     {},
     [1]
   )(1);
-});
+})();
+
+export { VoiceRecorder };

@@ -68,7 +68,6 @@ class AudioRecorder {
 }
 
 class Recorder {
-  // TODO: maybe move to static?
   audioRecorder;
   audioTimeEl;
   questionTimeEl;
