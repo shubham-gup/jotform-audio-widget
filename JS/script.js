@@ -17,6 +17,7 @@ let questionTime = 30;
 let questionFileName = 'audio_answer_'
 let initialised = false;
 let timesUp = false;
+let recordingAnswer = 'no_answer';
 
 let isRecordingStarted = false;
 const objects = {
@@ -109,12 +110,12 @@ async function done() {
       player.classList.add("display-none");
       responseSuccess.classList.remove("display-none");
       cancelButton.classList.add("display-none");
-      const recordingPath = await upload(url);
+      recordingAnswer = await upload(url);
       recButton.classList.remove("recording");
       waveBox.classList.remove("box-animate");
       if (JFCustomWidget) {
         JFCustomWidget.sendData({
-          value: JSON.stringify(recordingPath),
+          value: JSON.stringify(recordingAnswer),
           valid: true,
         });
       }
@@ -125,7 +126,7 @@ async function done() {
     responseFailed.classList.remove("display-none");
     if (JFCustomWidget) {
       JFCustomWidget.sendData({
-        value: "no_answer",
+        value: recordingAnswer,
         valid: true,
       });
     }
@@ -223,7 +224,7 @@ JFCustomWidget.subscribe("ready", function (formData) {
 
   JFCustomWidget.subscribe("submit", async function () {
     JFCustomWidget.sendSubmit({
-      value: "no_answer",
+      value: recordingAnswer,
       valid: !formData.required || timesUp,
     });
   });
