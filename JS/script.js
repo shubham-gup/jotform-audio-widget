@@ -112,7 +112,8 @@ async function done() {
       recButton.classList.remove("recording");
       waveBox.classList.remove("box-animate");
       if (JFCustomWidget) {
-        JFCustomWidget.sendSubmit({
+        console.log("HERE", recordingPath);
+        JFCustomWidget.sendData({
           value: recordingPath,
           valid: true,
         });
@@ -122,7 +123,7 @@ async function done() {
     player.classList.add("display-none");
     responseFailed.classList.remove("display-none");
     if (JFCustomWidget) {
-      JFCustomWidget.sendSubmit({
+      JFCustomWidget.sendData({
         value: null,
         valid: true,
       });
@@ -219,14 +220,10 @@ JFCustomWidget.subscribe("ready", function (formData) {
 
   console.log(formData);
 
-  JFCustomWidget.subscribe("submit", function () {
-    if (isRecordingStarted) {
-      done();
-    } else {
-      JFCustomWidget.sendSubmit({
-        value: null,
-        valid: !formData.required,
-      });
-    }
+  JFCustomWidget.subscribe("submit", async function () {
+    JFCustomWidget.sendSubmit({
+      value: null,
+      valid: !formData.required,
+    });
   });
 });
