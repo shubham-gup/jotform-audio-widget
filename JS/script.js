@@ -113,9 +113,8 @@ async function done() {
       recButton.classList.remove("recording");
       waveBox.classList.remove("box-animate");
       if (JFCustomWidget) {
-        console.log("HERE", recordingPath);
         JFCustomWidget.sendData({
-          value: recordingPath,
+          value: JSON.stringify(recordingPath),
           valid: true,
         });
       }
@@ -126,7 +125,7 @@ async function done() {
     responseFailed.classList.remove("display-none");
     if (JFCustomWidget) {
       JFCustomWidget.sendData({
-        value: null,
+        value: "no_answer",
         valid: true,
       });
     }
@@ -224,7 +223,7 @@ JFCustomWidget.subscribe("ready", function (formData) {
 
   JFCustomWidget.subscribe("submit", async function () {
     JFCustomWidget.sendSubmit({
-      value: null,
+      value: "no_answer",
       valid: !formData.required || timesUp,
     });
   });
