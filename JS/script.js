@@ -203,6 +203,7 @@ function startRecordingTimer() {
 
 function startQuestionTimer(cb) {
   let timeValue = questionTime;
+  questionTimeEl.innerHTML = getFormattedTime(timeValue);
   questionTimeInterval = setInterval(() => {
     timeValue--;
     if (timeValue <= 0) {
@@ -225,7 +226,7 @@ JFCustomWidget.subscribe("ready", function (formData) {
   JFCustomWidget.subscribe("submit", async function () {
     JFCustomWidget.sendSubmit({
       value: recordingAnswer,
-      valid: !formData.required || timesUp,
+      valid: !formData.required || timesUp || uploaded,
     });
   });
 });
