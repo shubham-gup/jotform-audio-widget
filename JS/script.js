@@ -1,5 +1,5 @@
-// import { Recorder } from "./Recorder.js";
 const recButton = document.querySelector(".record-btn");
+const cancelButton = document.querySelector(".cancel-btn");
 const waveBox = document.querySelector(".boxContainer");
 const questionTimeEl = document.querySelector(".question-time");
 const audioTimeEl = document.querySelector(".audio-time");
@@ -15,6 +15,7 @@ let questionTimeInterval;
 let recorderTimeInterval;
 let questionTime = 30;
 let questionFileName = 'audio_answer_'
+let initialised = false;
 
 let isRecordingStarted = false;
 const objects = {
@@ -24,24 +25,33 @@ const objects = {
 };
 
 function init(qTime, qId) {
+  initialised = true;
   questionTime = qTime;
   questionFileName = `${questionFileName}${qId}.wav`;
   startQuestionTimer(done);
 }
 
-// TODO: this is temp
-// init(10, 1);
-
 recButton.addEventListener("click", async () => {
-  if (!isRecorded) {
+  if (!isRecorded && initialised) {
     if (!isRecordingStarted) {
       startRecording(() => {
         recButton.classList.add("recording");
         waveBox.classList.add("box-animate");
+        cancelButton.classList.remove("display-none");
       });
     } else {
       await done();
     }
+  }
+});
+
+cancelButton.addEventListener("click", async () => {
+  if (isRecordingStarted && initialised) {
+    stopRecording(() => {
+      cancelButton.classList.add("display-none");
+      recButton.classList.remove("recording");
+      waveBox.classList.remove("box-animate");
+    }, false);
   }
 });
 
@@ -84,7 +94,7 @@ async function upload(url) {
   const res = await data.json();
   await uploadToS3(res, url);
   uploaded = true;
-  return questionFileName;
+  return res.path;
 }
 
 function markResponseRecorded() {
@@ -97,13 +107,13 @@ async function done() {
     stopRecording(async (url) => {
       player.classList.add("display-none");
       responseSuccess.classList.remove("display-none");
-      const recordingUrl = await upload(url);
+      cancelButton.classList.add("display-none");
+      const recordingPath = await upload(url);
       recButton.classList.remove("recording");
       waveBox.classList.remove("box-animate");
-      console.log(url);
       if (JFCustomWidget) {
         JFCustomWidget.sendSubmit({
-          value: recordingUrl,
+          value: recordingPath,
           valid: true,
         });
       }
@@ -146,7 +156,7 @@ function startRecording(cb) {
     .catch(function (err) {});
 };
 
-function stopRecording(cb) {
+function stopRecording(cb, isFinalSave = true) {
   if (isRecordingStarted) {
     if (objects.stream !== null) {
       objects.stream.getAudioTracks()[0].stop();
@@ -156,12 +166,19 @@ function stopRecording(cb) {
     if (objects.recorder !== null) {
       objects.recorder.stop();
 
-      objects.recorder.exportWAV(function (blob) {
-        cb(blob);
-      });
+      if (isFinalSave) {
+        objects.recorder.exportWAV(function (blob) {
+          cb(blob);
+        });
+      } else {
+        audioTimeEl.innerHTML = getFormattedTime(0);
+        cb();
+      }
     }
   }
-  clearInterval(questionTimeInterval);
+  if (isFinalSave) {
+    clearInterval(questionTimeInterval);
+  }
 };
 
 function getFormattedTime(t) {
@@ -199,8 +216,6 @@ JFCustomWidget.subscribe("ready", function (formData) {
   const label = JFCustomWidget.getWidgetSetting("questionTime");
 
   init(+label, formData.formID);
-
-  console.log(formData);
 
   JFCustomWidget.subscribe("submit", function () {
     done();

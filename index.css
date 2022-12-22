@@ -64,14 +64,19 @@ body {
   display: none;
 }
 
-.microphone {
+.microphone, .cancel {
   font-size: 20px;
 }
 
-.record-btn {
+.record-btn, .cancel-btn {
   border: none;
   background-color: inherit;
   cursor: pointer;
+}
+
+.cancel-btn {
+   margin-right: 14px;
+   color: red;
 }
 
 .record-btn.recording {
@@ -94,7 +99,7 @@ body {
   justify-content: space-between;
   align-items: center;
   height: 50px;
-  padding: 20px;
+  padding: 20px 10px;
 }
 
 .box {
