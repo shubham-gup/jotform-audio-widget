@@ -16,6 +16,7 @@ let recorderTimeInterval;
 let questionTime = 30;
 let questionFileName = 'audio_answer_'
 let initialised = false;
+let timesUp = false;
 
 let isRecordingStarted = false;
 const objects = {
@@ -120,6 +121,7 @@ async function done() {
       }
     });
   } else {
+    timesUp = true;
     player.classList.add("display-none");
     responseFailed.classList.remove("display-none");
     if (JFCustomWidget) {
@@ -223,7 +225,7 @@ JFCustomWidget.subscribe("ready", function (formData) {
   JFCustomWidget.subscribe("submit", async function () {
     JFCustomWidget.sendSubmit({
       value: null,
-      valid: !formData.required,
+      valid: !formData.required || timesUp,
     });
   });
 });
