@@ -202,21 +202,11 @@ const url = "https://staging.squadrun.co";
     }, 1000);
   }
 
-  function addRefreshCheck() {
-    window.addEventListener('beforeunload', function (e) {
-      // Cancel the event
-      e.preventDefault();
-      // Chrome requires returnValue to be set
-      e.returnValue = '';
-    });
-  }
-
   function init(qTime, qId) {
     initialised = true;
     questionTime = qTime;
     questionFileName = `${questionFileName}${qId}.wav`;
     startQuestionTimer(done);
-    addRefreshCheck();
   }
 
   JFCustomWidget.subscribe("ready", function (formData) {
