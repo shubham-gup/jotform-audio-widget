@@ -222,6 +222,11 @@ JFCustomWidget.subscribe("ready", function (formData) {
   JFCustomWidget.subscribe("submit", function () {
     if (isRecordingStarted) {
       done();
+    } else {
+      JFCustomWidget.sendSubmit({
+        value: null,
+        valid: !formData.required,
+      });
     }
   });
 });
