@@ -4,6 +4,10 @@
   font-weight: 300;
 }
 
+html {
+   font-size: 62.5%;
+}
+
 body {
   font-family: "Roboto", sans-serif;
   background: white;
@@ -12,24 +16,28 @@ body {
   overflow-x: hidden;
 }
 
+p {
+   font-size: 1.6rem;
+}
+
 :root {
   --wave-max-height: 50%;
 }
 
 .recorder {
-  width: 260px;
-  border-radius: 40px;
-  height: 54px;
+  width: 26rem;
+  border-radius: 4rem;
+  height: 5.4rem;
   background-color: #F1F3F4;
   display: flex;
   align-items: center;
-  padding-left: 20px;
-  padding-right: 20px;
-  margin: 10px 0;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  margin: 1rem 0;
 }
 
 .audio-player {
-   margin-bottom: 24px;
+   margin-bottom: 2.4rem;
 }
 
 .display-flex {
@@ -40,14 +48,22 @@ body {
   width: 100%;
 }
 
+.remainingQuestionTime {
+   font-size: 1.8rem;
+}
+
+.audioTime {
+   font-size: 1.6rem;
+}
+
 .response {
   align-items: center;
-  margin-left: 12px;
-  font-size: 14px;
+  margin-left: 1.2rem;
+  font-size: 1.4rem;
 }
 
 .response i {
-  margin-right: 5px;
+  margin-right: 0.5rem;
 }
 
 .check {
@@ -70,7 +86,7 @@ body {
 
 .microphone,
 .cancel {
-  font-size: 20px;
+  font-size: 2rem;
 }
 
 .recordBtn,
@@ -81,7 +97,7 @@ body {
 }
 
 .cancelBtn {
-  margin-right: 14px;
+  margin-right: 1.4rem;
   color: red;
 }
 
@@ -104,18 +120,18 @@ body {
   flex: 1;
   justify-content: space-between;
   align-items: center;
-  height: 50px;
-  padding: 20px 10px;
+  height: 5rem;
+  padding: 2rem 1rem;
 }
 
 .box {
   height: 10%;
-  width: 4px;
+  width: .4rem;
   background: #333;
   animation-duration: 1.2s;
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
-  border-radius: 8px;
+  border-radius: .8rem;
 }
 
 .boxContainer.box-animate .box {
@@ -183,19 +199,19 @@ body {
 /* Tooltip text */
 .tooltip .tooltiptext {
   visibility: hidden;
-  width: 120px;
+  width: 12rem;
   background-color: black;
   color: #fff;
   text-align: center;
-  padding: 5px 0;
-  border-radius: 6px;
+  padding: .5rem 0;
+  border-radius: .6rem;
 
   /* Position the tooltip text - see examples below! */
   position: absolute;
   z-index: 1;
   bottom: 120%;
   left: 50%;
-  margin-left: -60px; /* Use half of the width (120/2 = 60), to center the tooltip */
+  margin-left: -6rem; /* Use half of the width (120/2 = 60), to center the tooltip */
 }
 
 /* Show the tooltip text when you mouse over the tooltip container */
