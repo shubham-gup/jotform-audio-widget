@@ -71,7 +71,7 @@ const url = "https://staging.squadrun.co";
   async function upload(url) {
     if (uploaded) return;
     const data = await fetch(
-      `${baseUrl}/assessments/api/v10/assessment/get-signed-url`,
+      `${baseUrl}/file_upload/api/v1/speechassessment/get-signed-url`,
       {
         method: "POST",
         headers: {
