@@ -100,22 +100,18 @@ const url = "https://staging.squadrun.co";
         successResponseCapturedUI();
         recordingEndedUI();
         recordingAnswer = await upload(url);
-        if (JFCustomWidget) {
-          JFCustomWidget.sendData({
-            value: JSON.stringify(recordingAnswer),
-            valid: true,
-          });
-        }
+        JFCustomWidget.sendData({
+          value: JSON.stringify(recordingAnswer),
+          valid: true,
+        });
       });
     } else {
       timesUp = true;
       errorResponseCapturedUI();
-      if (JFCustomWidget) {
-        JFCustomWidget.sendData({
-          value: recordingAnswer,
-          valid: true,
-        });
-      }
+      JFCustomWidget.sendData({
+        value: recordingAnswer,
+        valid: true,
+      });
     }
   }
 
@@ -202,17 +198,31 @@ const url = "https://staging.squadrun.co";
     }, 1000);
   }
 
-  function init(qTime, qId) {
+  function initialiseAudioPlayer(src) {
+    if (src) {
+      const audioEl = document.querySelector('.audio-player');
+      audioEl.src = src;
+      audioEl.classList.remove('display-none');
+      JFCustomWidget.requestFrameResize({
+        width: 400,
+        height: 220,
+      });
+    }
+  }
+
+  function init(qTime, qId, audioSrc) {
     initialised = true;
     questionTime = qTime;
     questionFileName = `${questionFileName}${qId}.wav`;
     startQuestionTimer(done);
+    initialiseAudioPlayer(audioSrc);
   }
 
   JFCustomWidget.subscribe("ready", function (formData) {
     const label = JFCustomWidget.getWidgetSetting("questionTime");
+    const questionAudioUrl = JFCustomWidget.getWidgetSetting("questionAudioUrl");
 
-    init(+label, formData.formID);
+    init(+label, formData.formID, questionAudioUrl);
 
     JFCustomWidget.subscribe("submit", async function () {
       JFCustomWidget.sendSubmit({
