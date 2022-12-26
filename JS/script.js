@@ -222,7 +222,9 @@ const url = "https://staging.squadrun.co";
     const label = JFCustomWidget.getWidgetSetting("questionTime");
     const questionAudioUrl = JFCustomWidget.getWidgetSetting("questionAudioUrl");
 
-    init(+label, formData.formID, questionAudioUrl);
+    if (label != 0) {
+      init(+label, formData.formID, questionAudioUrl);
+    }
 
     JFCustomWidget.subscribe("submit", async function () {
       JFCustomWidget.sendSubmit({
