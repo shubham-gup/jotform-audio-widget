@@ -21,41 +21,43 @@
         <div class="permission-dialog display-none">
           Please give mic permissions to continue
         </div>
-        <div class="audio-recorder">
-          <span class="audioTime">0:00</span>
-          <div class="response response--success display-flex display-none">
-            <i class="fa fa-check check"></i>Response Recorded
-          </div>
-          <div class="response response--failed display-flex display-none">
-            <i class="fa fa-times cross"></i>Oops! Times up.
-          </div>
-          <div class="player display-flex">
-            <div class="boxContainer">
-              <div class="box box1"></div>
-              <div class="box box2"></div>
-              <div class="box box3"></div>
-              <div class="box box4"></div>
-              <div class="box box5"></div>
-              <div class="box box6"></div>
-              <div class="box box7"></div>
-              <div class="box box8"></div>
-              <div class="box box9"></div>
-              <div class="box box10"></div>
-              <div class="box box11"></div>
-              <div class="box box12"></div>
-              <div class="box box13"></div>
+        <div class="audio-recorder-wrapper">
+          <div class="audio-recorder">
+            <span class="audioTime">0:00</span>
+            <div class="response response--success display-flex display-none">
+              <i class="fa fa-check check"></i>Response Recorded
             </div>
+            <div class="response response--failed display-flex display-none">
+              <i class="fa fa-times cross"></i>Oops, time's up
+            </div>
+            <div class="player display-flex">
+              <div class="boxContainer">
+                <div class="box box1"></div>
+                <div class="box box2"></div>
+                <div class="box box3"></div>
+                <div class="box box4"></div>
+                <div class="box box5"></div>
+                <div class="box box6"></div>
+                <div class="box box7"></div>
+                <div class="box box8"></div>
+                <div class="box box9"></div>
+                <div class="box box10"></div>
+                <div class="box box11"></div>
+                <div class="box box12"></div>
+                <div class="box box13"></div>
+              </div>
+            </div>
+          </div>
+          <div class="tooltip">
             <button class="cancelBtn display-none">
-               <div class="tooltip">
-                  <i class="fa fa-times cancel"></i>
-                  <span class="tooltiptext">Click to Cancel recording</span>
-               </div>
-             </button>
+              <i class="fa fa-times font-size-20"></i>
+              <span class="tooltiptext">Click to Cancel recording</span>
+            </button>
+          </div>
+          <div class="tooltip">
             <button class="recordBtn">
-               <div class="tooltip">
-                  <i class="fa fa-microphone microphone"></i>
-                  <span class="tooltiptext tooltiptext--mic">Click to Start recording</span>
-               </div>
+              <i class="fa fa-microphone font-size-20 microphone"></i>
+              <span class="tooltiptext tooltiptext--mic">Click to Start recording</span>
             </button>
           </div>
         </div>

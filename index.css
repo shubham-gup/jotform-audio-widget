@@ -5,7 +5,7 @@
 }
 
 html {
-   font-size: 62.5%;
+  font-size: 62.5%;
 }
 
 body {
@@ -25,7 +25,7 @@ p {
 }
 
 .recorder {
-  width: 26rem;
+  width: fit-content;
   border-radius: 4rem;
   height: 5.4rem;
   background-color: #F1F3F4;
@@ -53,7 +53,8 @@ p {
 }
 
 .audioTime {
-   font-size: 1.6rem;
+  font-size: 1.6rem;
+  margin-right: 1rem;
 }
 
 .response {
@@ -74,10 +75,39 @@ p {
   color: red;
 }
 
-.audio-recorder {
+.audio-recorder-wrapper {
   display: flex;
   align-items: center;
   width: 100%;
+}
+
+.audio-recorder {
+  display: flex;
+  align-items: center;
+  width: 0;
+  opacity: 0;
+  animation-duration: 0.2s;
+  animation-timing-function: ease-in-out;
+  animation-fill-mode: forwards;
+}
+
+.audio-recorder-animate {
+  animation-name: animate-width;
+}
+
+@keyframes animate-width {
+  0% {
+    width: 0;
+  }
+
+  50% {
+    opacity: 0;
+  }
+
+  100% {
+    width: 18.5rem;
+    opacity: 1;
+  }
 }
 
 .display-none {
@@ -89,6 +119,14 @@ p {
   font-size: 2rem;
 }
 
+.font-size-20 {
+  font-size: 2rem;
+}
+
+.width-100 {
+  width: 100%;
+}
+
 .recordBtn,
 .cancelBtn {
   border: none;
@@ -97,12 +135,17 @@ p {
 }
 
 .cancelBtn {
-  margin-right: 1.4rem;
+  margin-right: 0.4rem;
+  padding: 1rem;
   color: red;
 }
 
+.recordBtn {
+  padding: 1rem;
+}
+
 .recordBtn.recording {
-  color: red;
+  color: green;
 }
 
 @keyframes animate {
@@ -121,7 +164,7 @@ p {
   justify-content: space-between;
   align-items: center;
   height: 5rem;
-  padding: 2rem 1rem;
+  padding: 2rem 0.5rem;
 }
 
 .box {
@@ -209,7 +252,7 @@ p {
   /* Position the tooltip text - see examples below! */
   position: absolute;
   z-index: 1;
-  bottom: 120%;
+  bottom: 85%;
   left: 50%;
   margin-left: -6rem; /* Use half of the width (120/2 = 60), to center the tooltip */
 }
