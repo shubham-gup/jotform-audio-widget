@@ -1,37 +1,42 @@
-import { VoiceRecorder } from "./voice_recorder.js";
+import { VoiceRecorder } from './voice_recorder.js';
+import { initiatePostCall } from './api.js';
 
-const url = "https://staging.squadrun.co";
+const url = 'https://staging.squadrun.co';
 
 (function (baseUrl) {
-  const recButton = document.querySelector(".recordBtn");
-  const cancelButton = document.querySelector(".cancelBtn");
-  const waveBox = document.querySelector(".boxContainer");
-  const questionTimeEl = document.querySelector(".questionTime");
-  const audioTimeEl = document.querySelector(".audioTime");
-  const player = document.querySelector(".player");
-  const responseSuccess = document.querySelector(".response--success");
-  const responseFailed = document.querySelector(".response--failed");
-  const tooltip = document.querySelector(".tooltiptext--mic");
-  const audioPlayer = document.querySelector(".audio-player");
+  const recButton = document.querySelector('.recordBtn');
+  const cancelButton = document.querySelector('.cancelBtn');
+  const waveBox = document.querySelector('.boxContainer');
+  const questionTimeEl = document.querySelector('.questionTime');
+  const audioTimeEl = document.querySelector('.audioTime');
+  const player = document.querySelector('.player');
+  const responseSuccess = document.querySelector('.response--success');
+  const tooltip = document.querySelector('.tooltiptext--mic');
+  const audioPlayer = document.querySelector('.audio-player');
+
+  const successUI = '<i class="fa fa-check check"></i>Response Recorded';
+  const failUI = `<i class="fa fa-times cross"></i><p>Oops, time's up</p>`;
+  const uploadErrorUI = `<i class="fa fa-times cross"></i><p>Uploading Audio Failed</p>`;
+  const uploadingUI = `<i class="fa fa-spinner spinner"></i>Uploading Audio`;
 
   let isRecorded = false;
   let uploaded = false;
-  let uploading = false;
   let questionTimeInterval;
   let recorderTimeInterval;
   let questionTime = 30;
-  let questionFileName = "audio_answer_";
+  let questionFileName = 'audio_answer_';
   let initialised = false;
   let timesUp = false;
-  let recordingAnswer = "no_answer";
+  let recordingAnswer = 'no_answer';
   let isRecordingStarted = false;
+  let uploading = false;
   const objects = {
     context: null,
     stream: null,
     recorder: null,
   };
 
-  recButton.addEventListener("click", async () => {
+  recButton.addEventListener('click', async () => {
     if (!isRecorded && initialised) {
       if (!isRecordingStarted) {
         changeTooltipTextSubmitRecording();
@@ -45,7 +50,7 @@ const url = "https://staging.squadrun.co";
     }
   });
 
-  cancelButton.addEventListener("click", () => {
+  cancelButton.addEventListener('click', () => {
     if (isRecordingStarted && initialised) {
       stopRecording(() => {
         recordingEndedUI(true);
@@ -55,7 +60,7 @@ const url = "https://staging.squadrun.co";
   });
 
   async function uploadToS3(presignedPostData, blob) {
-    const file = new File([blob], questionFileName, { type: "audio/wav" });
+    const file = new File([blob], questionFileName, { type: 'audio/wav' });
 
     const formData = new FormData();
 
@@ -63,35 +68,38 @@ const url = "https://staging.squadrun.co";
       formData.append(key, presignedPostData.fields[key]);
     });
 
-    formData.append("file", file);
+    formData.append('file', file);
 
-    await fetch(presignedPostData.url, {
-      method: "POST",
-      body: formData,
-    }).catch((err) => {});
+    try {
+      const data = await initiatePostCall(presignedPostData.url, null, formData);
+    } catch (e) {
+      console.log(e);
+      setUploadError();
+    }
   }
 
-  async function upload(url) {
+  async function upload(audioBlob) {
     if (uploaded) return;
     uploading = true;
-    const data = await fetch(
-      `${baseUrl}/file_upload/api/v1/speechassessment/get-signed-url`,
-      {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
+    uploadingAudio();
+    try {
+      const data = await initiatePostCall(
+        `${baseUrl}/file_upload/api/v1/speechassessment/get-signed-url`,
+        {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
+        JSON.stringify({
           object_name: questionFileName,
-        }),
-      }
-    ).catch((err) => {});
-    const res = await data.json();
-    await uploadToS3(res, url);
-    uploaded = true;
-    uploading = false;
-    return res.path;
+        })
+      );
+      const res = await data.json();
+      await uploadToS3(res, audioBlob);
+      uploaded = true;
+      return res.path;
+    } catch {
+      setUploadError();
+    }
   }
 
   function markResponseRecorded() {
@@ -102,9 +110,10 @@ const url = "https://staging.squadrun.co";
     markResponseRecorded();
     if (isRecordingStarted) {
       stopRecording(async (url) => {
-        successResponseCapturedUI();
         recordingEndedUI();
         recordingAnswer = await upload(url);
+        successResponseCapturedUI();
+        uploading = false;
         JFCustomWidget.sendData({
           value: JSON.stringify(recordingAnswer),
           valid: true,
@@ -113,6 +122,7 @@ const url = "https://staging.squadrun.co";
     } else {
       timesUp = true;
       errorResponseCapturedUI();
+      uploading = false;
       JFCustomWidget.sendData({
         value: recordingAnswer,
         valid: true,
@@ -174,8 +184,8 @@ const url = "https://staging.squadrun.co";
   function getFormattedTime(t) {
     const minutes = t >= 60 ? parseInt(t / 60) : 0;
     const seconds = t % 60;
-    return `${minutes < 10 ? "0" + minutes : minutes}:${
-      seconds < 10 ? "0" + seconds : seconds
+    return `${minutes < 10 ? '0' + minutes : minutes}:${
+      seconds < 10 ? '0' + seconds : seconds
     }`;
   }
 
@@ -228,15 +238,16 @@ const url = "https://staging.squadrun.co";
     audioPlayer.currentTime = 0;
   }
 
-  JFCustomWidget.subscribe("ready", function (formData) {
-    const label = JFCustomWidget.getWidgetSetting("questionTime");
-    const questionAudioUrl = JFCustomWidget.getWidgetSetting("questionAudioUrl");
+  JFCustomWidget.subscribe('ready', function (formData) {
+    const label = JFCustomWidget.getWidgetSetting('questionTime');
+    const questionAudioUrl =
+      JFCustomWidget.getWidgetSetting('questionAudioUrl');
 
     if (label != 0) {
       init(+label, formData.formID, questionAudioUrl);
     }
 
-    JFCustomWidget.subscribe("submit", async function () {
+    JFCustomWidget.subscribe('submit', async function () {
       if (uploading) return;
       resetAudioPlayer();
       JFCustomWidget.sendSubmit({
@@ -248,61 +259,79 @@ const url = "https://staging.squadrun.co";
 
   // UI methods
   function animatePlayer() {
-    const audioRecorder = document.querySelector(".audio-recorder");
+    const audioRecorder = document.querySelector('.audio-recorder');
     audioRecorder.classList.add('audio-recorder-animate');
   }
 
   function changeTooltipTextStartRecording() {
-    tooltip.innerHTML = "Click to Start Recording";;
+    tooltip.innerHTML = 'Click to Start Recording';
   }
 
   function changeTooltipTextSubmitRecording() {
-    tooltip.innerHTML = "Click to Submit Recording";
+    tooltip.innerHTML = 'Click to Submit Recording';
   }
 
   function recordingStartedUI() {
-    recButton.classList.add("recording");
-    waveBox.classList.add("box-animate");
-    cancelButton.classList.remove("display-none");
+    recButton.classList.add('recording');
+    waveBox.classList.add('box-animate');
+    cancelButton.classList.remove('display-none');
     animatePlayer();
-    const microphoneIcon = document.querySelector(".microphone");
+    const microphoneIcon = document.querySelector('.microphone');
     microphoneIcon.classList.add('fa-check');
     microphoneIcon.classList.remove('fa-microphone');
   }
 
   function recordingEndedUI(shouldMinimisePlayer) {
-    recButton.classList.remove("recording");
-    waveBox.classList.remove("box-animate");
-    cancelButton.classList.add("display-none");
-    const microphoneIcon = document.querySelector(".microphone");
+    recButton.classList.remove('recording');
+    waveBox.classList.remove('box-animate');
+    cancelButton.classList.add('display-none');
+    const microphoneIcon = document.querySelector('.microphone');
     microphoneIcon.classList.remove('fa-check');
     microphoneIcon.classList.add('fa-microphone');
     if (shouldMinimisePlayer) {
-      const audioRecorder = document.querySelector(".audio-recorder");
+      const audioRecorder = document.querySelector('.audio-recorder');
       audioRecorder.classList.remove('audio-recorder-animate');
     }
   }
 
   function hideAudioRecorderUI() {
-    player.classList.add("display-none");
-    recButton.classList.add("display-none");
+    player.classList.add('display-none');
+    recButton.classList.add('display-none');
   }
 
   function openRecorder() {
-    const audioRecorder = document.querySelector(".audio-recorder");
+    const audioRecorder = document.querySelector('.audio-recorder');
     audioRecorder.style.minWidth = '26rem';
   }
 
   function successResponseCapturedUI() {
     hideAudioRecorderUI();
     openRecorder();
-    responseSuccess.classList.remove("display-none");
+    setResponseUI(successUI);
+  }
+
+  function uploadingAudio() {
+    hideAudioRecorderUI();
+    openRecorder();
+    setResponseUI(uploadingUI);
   }
 
   function errorResponseCapturedUI() {
     hideAudioRecorderUI();
     animatePlayer();
     openRecorder();
-    responseFailed.classList.remove("display-none");
+    setResponseUI(failUI);
+  }
+
+  function setUploadError() {
+    hideAudioRecorderUI();
+    animatePlayer();
+    openRecorder();
+    setResponseUI(uploadErrorUI);
+  }
+
+  function setResponseUI(successUI) {
+    responseSuccess.classList.remove('display-none');
+    responseSuccess.innerHTML = successUI;
   }
 })(url);
