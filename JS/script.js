@@ -72,6 +72,7 @@ const url = 'https://staging.squadrun.co';
 
     try {
       const data = await initiatePostCall(presignedPostData.url, null, formData);
+      successResponseCapturedUI();
     } catch (e) {
       console.log(e);
       setUploadError();
@@ -112,7 +113,6 @@ const url = 'https://staging.squadrun.co';
       stopRecording(async (url) => {
         recordingEndedUI();
         recordingAnswer = await upload(url);
-        successResponseCapturedUI();
         uploading = false;
         JFCustomWidget.sendData({
           value: JSON.stringify(recordingAnswer),
